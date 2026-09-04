@@ -27,7 +27,7 @@ ifneq ($(wildcard $(srctree)/arch/$(SRCARCH)/include/uapi/asm/a.out.h \
 		  $(srctree)/arch/$(SRCARCH)/include/asm/a.out.h),)
 header-y += a.out.h
 endif
-
+header-y += binder.h
 header-y += acct.h
 header-y += adb.h
 header-y += adfs_fs.h
