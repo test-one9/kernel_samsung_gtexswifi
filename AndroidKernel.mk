@@ -59,13 +59,13 @@ endif
 endif
 
 $(TARGET_PREBUILT_KERNEL) : $(KERNEL_OUT) $(USER_CONFIG)  | $(KERNEL_CONFIG)
-	$(MAKE) -C kernel O=../$(KERNEL_OUT) ARCH=$(ARCH_) CROSS_COMPILE=$(CROSS_COMPILE_) headers_install
-	$(MAKE) -C kernel O=../$(KERNEL_OUT) ARCH=$(ARCH_) CROSS_COMPILE=$(CROSS_COMPILE_) -j${JOBS}
-	$(MAKE) -C kernel O=../$(KERNEL_OUT) ARCH=$(ARCH_) CROSS_COMPILE=$(CROSS_COMPILE_) modules
+	$(MAKE) CONFIG_DEBUG_SECTION_MISMATCH=y -C kernel O=../$(KERNEL_OUT) ARCH=$(KERNEL_ARCH_) CROSS_COMPILE=$(KERNEL_CROSS_COMPILE_) headers_install
+	$(MAKE) CONFIG_DEBUG_SECTION_MISMATCH=y -C kernel O=../$(KERNEL_OUT) ARCH=$(KERNEL_ARCH_) CROSS_COMPILE=$(KERNEL_CROSS_COMPILE_) -j${JOBS}
+	$(MAKE) CONFIG_DEBUG_SECTION_MISMATCH=y -C kernel O=../$(KERNEL_OUT) ARCH=$(KERNEL_ARCH_) CROSS_COMPILE=$(KERNEL_CROSS_COMPILE_) modules
 	@-mkdir -p $(KERNEL_MODULES_OUT)
 	@-find $(TARGET_OUT_INTERMEDIATES) -name *.ko ! -name mali.ko | xargs -I{} cp {} $(KERNEL_MODULES_OUT)
 	@-find $(KERNEL_MODULES_OUT) -name *.ko ! -name mali.ko -exec $(CROSS_COMPILE_)strip -d --strip-unneeded {} \;
 
 kernelheader:
 	mkdir -p $(KERNEL_OUT)
-	$(MAKE) ARCH=$(ARCH_) -C kernel O=../$(KERNEL_OUT) headers_install
+	$(MAKE) ARCH=$(KERNEL_ARCH_) CONFIG_DEBUG_SECTION_MISMATCH=y -C kernel O=../$(KERNEL_OUT) headers_install
